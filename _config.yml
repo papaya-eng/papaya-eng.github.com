@@ -14,7 +14,7 @@ tagline: papayamobile.
 author :
   name : Papaya Backend
   email : 
-  github : papaya-eng
+  github : github.com/papaya-eng
   feedburner : feedname
 
 # The production_url is only used when full-domain names are needed
@@ -83,11 +83,11 @@ JB :
   comments :
     provider : disqus
     disqus :
-      short_name : xxx
+      short_name : papaya-backend
     livefyre :
-      site_id : xxx
+      site_id : 
     intensedebate :
-      account : xxx
+      account : 
    
   # Settings for analytics helper
   # Set 'provider' to the analytics provider you want to use.
@@ -96,7 +96,7 @@ JB :
   analytics :
     provider : google 
     google : 
-        tracking_id : ''
+        tracking_id : 'UA-39420660-1'
     getclicky :
       site_id : 
     mixpanel :
