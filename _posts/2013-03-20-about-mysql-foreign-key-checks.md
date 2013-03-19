@@ -4,7 +4,7 @@ title: "About mysql foreign key checks"
 description: ""
 category: 
 tags: [mysql]
-author: 
+author: <a href="https://github.com/socrateslee">Chun Li</a>
 ---
 {% include JB/setup %}
 
