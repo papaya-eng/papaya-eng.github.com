@@ -1,6 +1,6 @@
 ---
 layout: default
-title: index
+title: Papaya Backend Blog
 ---
  
 <section class="content">
