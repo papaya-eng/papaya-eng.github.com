@@ -8,7 +8,7 @@ author: <a href="https://github.com/socrateslee">Chun Li</a>
 ---
 {% include JB/setup %}
 
-Redis sentinel is a great tool for autonomoous failover of redis servers. The detail of how to setup and use redis sentinel is available in [the redis official documents](http://redis.io/topics/sentinel).
+Redis sentinel is a great tool for autonomous failover of redis servers. The detail of how to setup and use redis sentinel is available in [the redis official documents](http://redis.io/topics/sentinel).
 
 What we gonna talk about here is a special case. First let's assuming we have following quick setup(all use redis 2.6.12):
 
