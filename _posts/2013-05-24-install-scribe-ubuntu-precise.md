@@ -19,7 +19,7 @@ author: <a href="https://github.com/elprup">elprup</a>
 
         sudo apt-get install libboost-all-dev libboost-test-dev libboost-program-options-dev libevent-dev automake libtool flex bison pkg-config g++ libssl-dev git-core make
          
-3. install thrift, facebook303
+3. install thrift and facebook303.
 
         wget http://archive.apache.org/dist/thrift/0.9.0/thrift-0.9.0.tar.gz
         tar xzvf thrift-0.9.0.tar.gz
@@ -40,11 +40,11 @@ author: <a href="https://github.com/elprup">elprup</a>
         ./bootstrap.sh
         ./configure  CPPFLAGS="-DHAVE_INTTYPES_H -DHAVE_NETINET_IN_H"
         make
-It should work here, but my computer always says undefined reference boost::system, so refer to some link[https://github.com/facebook/scribe/issues/57], just link by yourself.
+It should work here, but my computer always says undefined reference boost::system, refer to [the link](https://github.com/facebook/scribe/issues/57), just link by yourself.
 
         cd ./src
         g++ -Wall -O3 -o scribed store.o store_queue.o conf.o file.o conn_pool.o scribe_server.o network_dynamic_config.o dynamic_bucket_updater.o env_default.o -L/usr/local/lib -L/usr/local/lib -L/usr/local/lib -lfb303 -lthrift -lthriftnb -levent -lpthread libscribe.a libdynamicbucketupdater.a -L/usr/lib -lboost_system-mt -lboost_filesystem-mt
         cd ..
         sudo make install
         
-GIST  LINK[https://gist.github.com/elprup/5642303]
+[The gist link](https://gist.github.com/elprup/5642303)
