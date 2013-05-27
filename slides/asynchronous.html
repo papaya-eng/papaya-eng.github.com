@@ -1,0 +1,329 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Server Side Asynchronous Task Processing</title>
+
+		<meta name="description" content="A framework for easily creating beautiful presentations using HTML">
+		<meta name="author" content="Hakim El Hattab">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<link rel="stylesheet" href="css/reveal.min.css">
+
+		<link rel="stylesheet" href="css/theme/default.css" id="theme">
+
+		<!-- For syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+		
+		<!-- If the query includes 'print-pdf', use the PDF print sheet -->
+		<script>
+			document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+
+				<section>
+					<h1>Server Side Asynchronous Task Processing</h1>
+					<p>
+						<small>Created by Chun Li</small>
+					</p>
+				</section>
+
+                                <section>
+				    <section>
+                                        <h1>Why Asynchronous?</h1>
+				    </section>
+
+				    <section>
+                                        <img src="asynchronous/chunyun.jpg"/>
+                                        <br/>春运
+				    </section>
+
+				    <section data-markdown>
+                                        <script type="text/template">
+                                        + Over capacity, services may simple be crashed
+                                        + Very bad user experience
+                                        + Very hard to transfer the load
+                                        + Are they really need to be processed there?
+                                        </script>
+				    </section>
+
+				    <section>
+                                        <img src="asynchronous/expo.jpg"/>
+                                        <br/>世博
+				    </section>
+
+				    <section data-markdown>
+                                        <script type="text/template">
+                                        + Managed number of requests processed
+                                        + You may close the long queue anytime
+                                        + Minimize the load of the services
+                                        </script>
+				    </section>
+
+				    <section>
+                                        <img src="asynchronous/mcdonald.jpg"/>
+                                        <br/>McDonald
+				    </section>
+
+				    <section data-markdown>
+                                        <script type="text/template">
+                                        ###synchronous processing
+                                        + ordering
+                                        + payment
+                                        </script>
+				    </section>                                            
+                                            
+				    <section data-markdown>
+                                        <script type="text/template">
+                                        ###asynchronous processing
+                                        + refine the ditch oil
+                                        + frying sick chickens
+                                        + cooking the food
+                                        + packaging
+                                        + washing the disks
+                                        </script>
+				    </section>
+
+				    <section data-markdown>
+                                        <script type="text/template">
+                                        ##Better make use of the limited sychronous time!
+                                        </script>
+				    </section>
+
+                                </section>
+
+                                <section>
+				    <section>
+				        <h1>Know your capacity!</h1>
+                                    </section>
+
+				    <section>
+				        <h1>Asynchronous or not, you still have to do everything!</h1>
+                                    </section>
+
+				    <section data-markdown>
+                                        <script type="text/template">
+                                        ###example: backlog
+
+                                            sock = create_socket()
+                                            sock.listen(backlog=20)
+
+                                        Get rid of the requests when you are overloaded.
+                                        </script>
+                                    </section>
+
+                                </section>
+
+                                <section>
+				    <section>
+				        <h1>In Process Asynchronous</h1>
+                                    </section>
+
+				    <section data-markdown>
+                                        <script type="text/template">
+                                        ###A game server process
+                                        + An in process queue.
+                                        + A thread pool as workers.
+                                        + Requests pushed into the queue.
+                                        + A worker pop a job from the queue and process it.
+                                        + A event system for server side push.
+                                        </script>
+                                    </section>
+
+				    <section data-markdown>
+                                        <script type="text/template">
+                                        ###Benefits
+                                        + An easy main handler
+                                          + Pushing a job is a very fast step.
+                                          + Let the worker thread handle the heavy work.
+                                        + Serve more concurrent connections
+                                          + No jobs for dummy connections
+                                          + Use limited resources when load is heavy.
+                                        </script>
+                                    </section>
+
+                                </section>
+
+                                <section>
+                                    <section>
+                                        <h1>Distributed queue service</h1>
+                                    </section>
+
+				    <section data-markdown>
+                                        <script type="text/template">
+                                        ###Why distributed queue service?
+                                        + A client may trigger a very heavy job.
+                                        + Serve both tcp and http(stateless).
+                                        + Some backend jobs(e.x. statistics).
+                                        + Prefetch and broadcast.
+                                        + Retry and delay of jobs.
+                                        + Asynchronous jobs even serving process dies.
+                                        </script>
+                                    </section>
+
+				    <section data-markdown>
+                                        <script type="text/template">
+                                        ###Basic Design
+                                        + Master and worker
+                                          + Master for managing, and doing dirty works
+                                          + Worker only processing tasks
+                                        + Use redis as primary storage
+                                        </script>
+                                    </section>
+
+				    <section data-markdown>
+                                        <script type="text/template">
+                                        ###Redis Storage
+                                        + In memory database, very fast
+                                        + Atomic push and pop list operation
+                                        + Prority queue for delayed tasks
+                                        + The redis sentinel for high availability
+                                        </script>
+                                    </section>
+
+				    <section data-markdown>
+                                        <script type="text/template">
+                                        ###Queue Master Design
+                                        + Every masters are equal, no single point of failure.
+                                        + Handle the communication with redis.
+                                        + Handle the task failure and retry.
+                                        + Handle different queues.
+                                        + Reduce direct connections to redis.
+                                        </script>
+                                    </section>
+
+				    <section data-markdown>
+                                        <script type="text/template">
+                                        ###Queue Worker Design
+                                        + Focus on doing the tasks.
+                                        + May be killed or dropped.
+                                        + Communication only with master.
+                                        + Some wrapper for easy use.
+                                        </script>
+                                    </section>
+
+                                </section>
+
+                                <section>
+                                    <section>
+                                        <h1>Scaling and Optimization</h1>
+                                    </section>
+
+				    <section data-markdown>
+                                        <script type="text/template">
+                                        ###Benefits of ec2
+                                        + Open a new instanes in a minute.
+                                        + Images for fast server creating.
+                                        + Api for automatically deploy.
+                                        + Easy access control.
+                                        + Spot instances.
+                                        </script>
+                                    </section>
+
+				    <section data-markdown>
+                                        <script type="text/template">
+                                        ###Monitoring the load
+                                        + The number of queued tasks.
+                                        + The number of idled workers.
+                                        + The trend of queued tasks.
+                                        + The redis storage size.
+                                        </script>
+                                    </section>
+
+				    <section data-markdown>
+                                        <script type="text/template">
+                                        ###Scaling the worker
+                                        + Scaling linearly(one instance each time).
+                                        + Scaling based on monitoring results.
+                                        + Fast add/remove instance with multiple workers.
+                                        </script>
+                                    </section>
+
+				    <section data-markdown>
+                                        <script type="text/template">
+                                        ###Scaling the redis
+                                        + Allocate independent redis instances for different queues.
+                                        + The master slave replication.
+                                        + Monitoring with redis sentinel.
+                                        </script>
+                                    </section>
+
+				    <section data-markdown>
+                                        <script type="text/template">
+                                        ###Optimization
+                                        + Add a batch of tasks one time.
+                                        + Explore more atomic operations, reduce ditributed locks.
+                                        + Preload some modules.
+                                        + Similiar tasks in the same queue.
+                                        </script>
+                                    </section>
+
+
+                                </section>
+
+                                <section>
+
+                                    <section>
+                                        <h1>Questions?</h1>
+                                    </section>
+                                </section>
+
+				<section>
+					<h1>THANK YOU!</h1>
+					<h1>THE END</h1>
+					<h3>by Chun Li</h3>
+				</section>
+
+			</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.min.js"></script>
+
+		<script>
+
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+				transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/showdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+					// { src: 'plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
